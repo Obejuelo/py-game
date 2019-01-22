@@ -1,9 +1,11 @@
 import pygame
 import sys
 from .config import *
+import random
 
 from .platform import Platform
 from .player import Player
+from .wall import Wall
 
 class Game:
 
@@ -15,6 +17,8 @@ class Game:
         pygame.display.set_caption(TITLE)
 
         self.running = True
+
+        self.clock = pygame.time.Clock()
 
     def start(self):
         self.new()
@@ -29,11 +33,27 @@ class Game:
 
         # Generate sprites group
         self.sprites = pygame.sprite.Group()
+        self.walls = pygame.sprite.Group()
+
         self.sprites.add(self.platform)
         self.sprites.add(self.player)
 
+        self.generate_walls()
+
+    def generate_walls(self):
+        last_position = WIDTH + 100
+        if not len(self.walls) > 0:
+            for w in range(0, 10):
+                left = random.randrange(last_position + 200, last_position + 400)
+                wall = Wall(left, self.platform.rect.top)
+
+                last_position = wall.rect.right
+                self.sprites.add(wall)
+                self.walls.add(wall)
+
     def run(self):
         while self.running:
+            self.clock.tick(FPS)
             self.events()
             self.draw()
             self.update()
@@ -44,6 +64,10 @@ class Game:
                 self.running = False
                 pygame.quit()
                 sys.exit()
+        key = pygame.key.get_pressed()
+
+        if key[pygame.K_SPACE]:
+            self.player.jump()
 
     def draw(self):
         self.surface.fill(DARK)
