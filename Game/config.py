@@ -5,9 +5,16 @@ FPS = 60
 TITLE = 'My game'
 
 DARK = (23, 23, 23)
+WHITE = (200, 200, 200)
 GREEN = (69, 184, 81)
 BLUE = (78, 137, 193)
 RED = (184, 64, 88)
+YELLOW = (255, 255, 0)
+TEAL = (0, 128, 128)
 
 PLAYER_GRAV = 1.2
 SPEED = 5
+
+MAX_COINS = 15
+
+FONT = 'Arial'
