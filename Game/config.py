@@ -10,3 +10,4 @@ BLUE = (78, 137, 193)
 RED = (184, 64, 88)
 
 PLAYER_GRAV = 1.2
+SPEED = 5

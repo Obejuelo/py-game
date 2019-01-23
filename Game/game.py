@@ -17,6 +17,7 @@ class Game:
         pygame.display.set_caption(TITLE)
 
         self.running = True
+        self.playing = True
 
         self.clock = pygame.time.Clock()
 
@@ -74,10 +75,33 @@ class Game:
         self.sprites.draw(self.surface)
 
     def update(self):
-        #update display
-        pygame.display.flip()
-        self.sprites.update()
-        self.player.validate_platform(self.platform)
+        if self.playing:
+            #update display
+            pygame.display.flip()
+
+            wall = self.player.collide_with(self.walls)
+            if wall:
+                if self.player.collide_bottom(wall):
+                    self.player.skid(wall)
+                else:
+                    self.stop()
+
+            self.sprites.update()
+            self.player.validate_platform(self.platform)
+
+            self.update_elements(self.walls)
+            self.generate_walls()
+
+    def update_elements(self, elements):
+        for element in elements:
+            if not element.rect.right > 0:
+                element.kill()
 
     def stop(self):
-        pass
+        self.playing = False
+        self.player.stop()
+        self.stop_elements(self.walls)
+
+    def stop_elements(self, elemenst):
+        for element in elemenst:
+            element.stop()

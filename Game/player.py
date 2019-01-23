@@ -18,6 +18,21 @@ class Player(pygame.sprite.Sprite):
 
         self.can_jump = False
 
+        self.playing = True
+
+    def collide_with(self, sprites):
+        objects = pygame.sprite.spritecollide(self, sprites, False)
+        if objects:
+            return objects[0]
+
+    def collide_bottom(self, wall):
+        return self.rect.colliderect(wall.rect_top)
+
+    def skid(self, wall):
+        self.pos_y = wall.rect.top
+        self.vel_y = 0
+        self.can_jump = True
+
     def jump(self):
         if self.can_jump:
             self.vel_y = -23
@@ -35,5 +50,10 @@ class Player(pygame.sprite.Sprite):
         self.pos_y += self.vel_y + 0.5 * PLAYER_GRAV
 
     def update(self):
-        self.update_pos()
-        self.rect.bottom = self.pos_y
+        if self.playing:
+            self.update_pos()
+            self.rect.bottom = self.pos_y
+
+    def stop(self):
+        self.playing = False
+
